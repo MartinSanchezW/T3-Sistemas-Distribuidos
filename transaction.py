@@ -1,9 +1,6 @@
 from enums import TransactionState, ValidationType, ServerResponse
 
 class Transaction:
-    """
-    Transacción 2PC
-    """
     def __init__(self, transaction_id: str):
         self.transaction_id = transaction_id
         self.state = None
@@ -15,9 +12,6 @@ class Transaction:
         self.approved_by_servers = set()
 
     def begin(self):
-        """
-        Inicia la transacción si no ha sido iniciada.
-        """
         if not self.has_begun:
             self.state = TransactionState.ABIERTA
             self.has_begun = True
@@ -53,11 +47,17 @@ class Transaction:
             self.state = TransactionState.INVALIDA
             raise Exception(f"ERROR: {self.transaction_id} -> READ {key}= (not found)")
 
-    def can_commit(self) -> bool:
-        pass
-
     def abort(self):
-        pass
+        if self.state != TransactionState.CONFIRMADA:
+            print(f"INFO: {self.transaction_id} -> ABORT. Estado: {TransactionState.ABORTADA.value}")
+            self.state = TransactionState.ABORTADA
 
     def commit(self):
         pass
+
+    def is_finished(self) -> bool:
+        return self.state in (
+            TransactionState.CONFIRMADA,
+            TransactionState.ABORTADA,
+            TransactionState.INVALIDA
+        )
