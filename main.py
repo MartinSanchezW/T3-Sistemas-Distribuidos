@@ -18,22 +18,26 @@ import enum
 from enums import TransactionState, ValidationType, ServerResponse
 
 
+def load_jsonc(path):
+    with open(path, 'r', encoding='utf-8') as f:
+        lines = f.readlines()
+
+    clean_lines = []
+    for line in lines:
+        # ignoramos lineas que empiezan con comentario
+        if re.match(r'^\s*//', line):
+            continue
+        # ignoramos comentarios al final de la línea
+        clean_line = re.sub(r'//.*', '', line)
+        clean_lines.append(clean_line.rstrip())
+
+    cleaned_content = "\n".join(clean_lines)
+    return json.loads(cleaned_content)
+
+
 if __name__ == "__main__":
     # Completar con tu implementación o crea más archivos y funciones
     print(argv)
-
-    print("Un, dos, tres y...")
-    print("Mala")
-    print("Esta cuenta es mala")
-    print("Se cae la ventana")
-    print("No cuadra la tabla")
-    print("Mala")
-    print("Como fila muy larga")
-    print("Como clave olvidada")
-    print("Esta cuenta es mala")
-    print("Mala")
-    print("Como tasa muy alta")
-    print("Como deuda atrasada")
-    print("Como sistema caído")
-    print("Mala")
-    print("¡Pero es mía!")
+    test_path = argv[1]
+    test_dict = load_jsonc(test_path)
+    print(test_dict)
