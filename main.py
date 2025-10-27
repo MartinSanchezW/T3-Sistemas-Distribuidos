@@ -16,7 +16,7 @@ import enum
 # Recuerda que no se permite importar otros módulos/librerías a excepción de los creados
 # por ustedes o las ya incluidas en este main.py
 from enums import TransactionState, ValidationType, ServerResponse
-
+from simulation import Simulation
 
 def load_jsonc(path):
     with open(path, 'r', encoding='utf-8') as f:
@@ -40,4 +40,6 @@ if __name__ == "__main__":
     print(argv)
     test_path = argv[1]
     test_dict = load_jsonc(test_path)
-    print(test_dict)
+    simulation = Simulation(test_dict)
+    simulation.run()
+    simulation.generate_output_file()

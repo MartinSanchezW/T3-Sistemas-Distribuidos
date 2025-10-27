@@ -76,4 +76,29 @@ class Simulation:
         for event in self.events:
             self.process_event(event)
 
-    
+    def generate_output_file(self):
+        with open("simulation_log.txt", "w", encoding="utf-8") as f:
+            f.write("##LOGS##\n")
+            if len(self.logs) == 0:
+                f.write("No hubo logs\n")
+            for log in self.logs:
+                f.write(log + "\n")
+
+            f.write("##DATABASE##\n")
+            for key, value in self.db.items():
+                f.write(f"{key}={value}\n")
+
+            f.write("##STATS##\n")
+            stats = self.get_stats()
+            f.write(f"ABIERTA={stats['ABIERTA']}\n")
+            f.write(f"ABORTADA={stats['ABORTADA']}\n")
+            f.write(f"CONFIRMADA={stats['CONFIRMADA']}\n")
+            f.write(f"EN_PREPARACION={stats['EN_PREPARACION']}\n")
+            f.write(f"INVALIDA={stats['INVALIDA']}\n")
+
+    def get_stats(self) -> dict:
+        stats = {"ABIERTA": [], "ABORTADA": [], "INVALIDA": [], "CONFIRMADA": [], "EN_PREPARACION": []}
+        for transaction in self.transactions.values():
+            stats[transaction.state.value].append(transaction.transaction_id)
+        return stats
+
