@@ -22,18 +22,22 @@ class Transaction:
         if self.state != TransactionState.ABIERTA:
             if self.state == TransactionState.EN_PREPARACION:
                 self.state = TransactionState.INVALIDA
-                raise Exception(f"ERROR: {self.transaction_id} -> WRITE no permitido en estado {self.state.value}. Debe abortar o esperar commit.")
-            raise Exception(f"ERROR: {self.transaction_id} -> WRITE no permitido en estado {self.state.value}")
+                print(f"ERROR: {self.transaction_id} -> WRITE no permitido en estado {self.state.value}. Debe abortar o esperar commit.")
+                return
+            print(f"ERROR: {self.transaction_id} -> WRITE no permitido en estado {self.state.value}")
+            return
         self.write_set[key] = value
         print(f"INFO: {self.transaction_id} -> WRITE {key}={value}")
 
-    def read(self, key: str, db: dict) -> str:
+    def read(self, key: str, db: dict):
         if self.state != TransactionState.ABIERTA:
             if self.state == TransactionState.EN_PREPARACION:
                 self.state = TransactionState.INVALIDA
-                raise Exception(f"ERROR: {self.transaction_id} -> READ no permitido en estado {self.state.value}. Debe abortar o esperar commit.")
-            raise Exception(f"ERROR: {self.transaction_id} -> READ no permitido en estado {self.state.value}")
-        
+                print(f"ERROR: {self.transaction_id} -> READ no permitido en estado {self.state.value}. Debe abortar o esperar commit.")
+                return 
+            print(f"ERROR: {self.transaction_id} -> READ no permitido en estado {self.state.value}")
+            return 
+
         if key in self.write_set:
             value = self.write_set[key]
             self.read_set.add(key)
@@ -47,7 +51,7 @@ class Transaction:
             return value
         else:
             self.state = TransactionState.INVALIDA
-            raise Exception(f"ERROR: {self.transaction_id} -> READ {key}= (not found)")
+            print(f"ERROR: {self.transaction_id} -> READ {key}= (not found)")
 
     def abort(self):
         if self.state != TransactionState.CONFIRMADA:

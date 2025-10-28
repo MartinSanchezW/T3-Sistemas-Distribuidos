@@ -94,11 +94,11 @@ class Simulation:
 
             f.write("##STATS##\n")
             stats = self.get_stats()
-            f.write(f"ABIERTA={stats['ABIERTA']}\n")
-            f.write(f"ABORTADA={stats['ABORTADA']}\n")
-            f.write(f"CONFIRMADA={stats['CONFIRMADA']}\n")
-            f.write(f"EN_PREPARACION={stats['EN_PREPARACION']}\n")
-            f.write(f"INVALIDA={stats['INVALIDA']}\n")
+            f.write(f"ABIERTA={json.dumps(list(stats['ABIERTA']))}\n")
+            f.write(f"ABORTADA={json.dumps(list(stats['ABORTADA']))}\n")
+            f.write(f"CONFIRMADA={json.dumps(list(stats['CONFIRMADA']))}\n")
+            f.write(f"EN_PREPARACION={json.dumps(list(stats['EN_PREPARACION']))}\n")
+            f.write(f"INVALIDA={json.dumps(list(stats['INVALIDA']))}\n")
 
     def get_stats(self) -> dict:
         stats = {"ABIERTA": [], "ABORTADA": [], "INVALIDA": [], "CONFIRMADA": [], "EN_PREPARACION": []}
