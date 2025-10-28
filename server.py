@@ -4,7 +4,7 @@ from transaction import Transaction
 class Server: 
     def __init__(self, name: str):
         self.name = name
-        self.transactions = {}
+        self.accepted_transactions = {}
 
     def can_commit(self, transaction: Transaction, validation_type: ValidationType) -> ServerResponse:
         pass

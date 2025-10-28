@@ -6,8 +6,7 @@ class Transaction:
         self.state = None
         self.has_begun = False
 
-        self.read_set = set()
-        self.write_set = {}
+        self.local_db = {}
 
         self.approved_by_servers = set()
 
@@ -23,7 +22,7 @@ class Transaction:
                 self.state = TransactionState.INVALIDA
                 raise Exception(f"ERROR: {self.transaction_id} -> WRITE no permitido en estado {self.state.value}. Debe abortar o esperar commit.")
             raise Exception(f"ERROR: {self.transaction_id} -> WRITE no permitido en estado {self.state.value}")
-        self.write_set[key] = value
+        self.local_db[key] = value
         print(f"INFO: {self.transaction_id} -> WRITE {key}={value}")
 
     def read(self, key: str, db: dict) -> str:
@@ -33,9 +32,9 @@ class Transaction:
                 raise Exception(f"ERROR: {self.transaction_id} -> READ no permitido en estado {self.state.value}. Debe abortar o esperar commit.")
             raise Exception(f"ERROR: {self.transaction_id} -> READ no permitido en estado {self.state.value}")
         
-        if key in self.write_set:
-            value = self.write_set[key]
-            print(f"INFO: {self.transaction_id} -> READ {key}={value} (from write set)")
+        if key in self.local_db:
+            value = self.local_db[key]
+            print(f"INFO: {self.transaction_id} -> READ {key}={value} (from local)")
             return value
         
         elif key in db:

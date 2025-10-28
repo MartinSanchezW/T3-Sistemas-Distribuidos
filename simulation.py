@@ -21,9 +21,9 @@ class Simulation:
             possible_values.add(self.db[key])
         for transaction in self.transactions.values():
             if transaction.state == TransactionState.ABIERTA or transaction.state == TransactionState.EN_PREPARACION:
-                if key in transaction.write_set:
-                    if transaction.write_set[key] != "DELETE":
-                        possible_values.add(transaction.write_set[key])
+                if key in transaction.local_db:
+                    if transaction.local_db[key] != "DELETE":
+                        possible_values.add(transaction.local_db[key])
 
         self.logs.append(json.dumps(list(possible_values)))
     
