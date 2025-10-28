@@ -116,11 +116,17 @@ class Simulation:
         # Se actualiza el servidor internamente.
     
     def commit(self, transaction: Transaction) -> None:
-        isQuorumOk = len(transaction.approved_by_servers) >= (len(self.server_list) // 2) + 1
+        approved_servers = set()
+        for server in self.servers.values():
+            if transaction.transaction_id in server.accepted_transactions:
+                approved_servers.add(server.name)
+
+        isQuorumOk = len(approved_servers) >= (len(self.server_list) // 2) + 1
 
         isStateValid = transaction.state == TransactionState.EN_PREPARACION
 
         isBackwardValid = self.backward_control(transaction)
+
 
         if isQuorumOk and isStateValid and isBackwardValid:
             # Commit

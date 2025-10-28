@@ -10,8 +10,6 @@ class Transaction:
         self.start_time = start_time
         self.end_time = None #!  Falta setearlo al finalizar
 
-        self.approved_by_servers = set()
-
     def begin(self):
         if not self.has_begun:
             self.state = TransactionState.ABIERTA
@@ -61,8 +59,6 @@ class Transaction:
     def commit(self):
         pass
 
-    def accept_by_server(self, server_name: str):
-        self.approved_by_servers.add(server_name)
         
     def is_finished(self) -> bool:
         return self.state in (
