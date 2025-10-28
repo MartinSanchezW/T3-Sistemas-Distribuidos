@@ -1,12 +1,14 @@
 from enums import TransactionState, ValidationType, ServerResponse
 
 class Transaction:
-    def __init__(self, transaction_id: str):
+    def __init__(self, transaction_id: str, start_time: int):
         self.transaction_id = transaction_id
         self.state = None
         self.has_begun = False
-
-        self.local_db = {}
+        self.read_set = set()
+        self.write_set = {}
+        self.start_time = start_time
+        self.end_time = None #!  Falta setearlo al finalizar
 
         self.approved_by_servers = set()
 
@@ -22,7 +24,7 @@ class Transaction:
                 self.state = TransactionState.INVALIDA
                 raise Exception(f"ERROR: {self.transaction_id} -> WRITE no permitido en estado {self.state.value}. Debe abortar o esperar commit.")
             raise Exception(f"ERROR: {self.transaction_id} -> WRITE no permitido en estado {self.state.value}")
-        self.local_db[key] = value
+        self.write_set[key] = value
         print(f"INFO: {self.transaction_id} -> WRITE {key}={value}")
 
     def read(self, key: str, db: dict) -> str:
@@ -32,8 +34,9 @@ class Transaction:
                 raise Exception(f"ERROR: {self.transaction_id} -> READ no permitido en estado {self.state.value}. Debe abortar o esperar commit.")
             raise Exception(f"ERROR: {self.transaction_id} -> READ no permitido en estado {self.state.value}")
         
-        if key in self.local_db:
-            value = self.local_db[key]
+        if key in self.write_set:
+            value = self.write_set[key]
+            self.read_set.add(key)
             print(f"INFO: {self.transaction_id} -> READ {key}={value} (from local)")
             return value
         
@@ -54,6 +57,9 @@ class Transaction:
     def commit(self):
         pass
 
+    def accept_by_server(self, server_name: str):
+        self.approved_by_servers.add(server_name)
+        
     def is_finished(self) -> bool:
         return self.state in (
             TransactionState.CONFIRMADA,

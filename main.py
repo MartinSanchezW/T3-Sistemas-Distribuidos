@@ -37,7 +37,6 @@ def load_jsonc(path):
 
 if __name__ == "__main__":
     # Completar con tu implementación o crea más archivos y funciones
-    print(argv)
     test_path = argv[1]
     test_dict = load_jsonc(test_path)
     simulation = Simulation(test_dict)

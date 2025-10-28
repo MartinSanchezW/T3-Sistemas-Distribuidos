@@ -1,16 +1,16 @@
 ##LOGS##
-1
-["1", "2"]
-["1", "4444", "2"]
-["1", "4444", "2"]
-["1", "4444", "2"]
+["1000"]
+500
+["900", "1000"]
+["1000"]
+1000
+NULL
 ##DATABASE##
-VAR_1=1
-VAR_2=Hola
-
+cuenta_Guaripolo=1000
+cuenta_Bodoque=500
 ##STATS##
-ABIERTA=['T1', 'T2']
+ABIERTA=[]
 ABORTADA=[]
 CONFIRMADA=[]
-EN_PREPARACION=[]
+EN_PREPARACION=['T1']
 INVALIDA=[]
