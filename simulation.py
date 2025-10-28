@@ -82,6 +82,7 @@ class Simulation:
             self.process_event(event)
 
     def generate_output_file(self, name: str):
+        name = name.replace(".jsonc", ".txt")
         path = os.path.join("logs", name)
         with open(path, "w", encoding="utf-8") as f:
             f.write("##LOGS##\n")

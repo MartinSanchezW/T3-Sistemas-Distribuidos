@@ -1,12 +1,7 @@
 ##LOGS##
-1
-["1", "2"]
-["4444", "2"]
-["2"]
-["2"]
+["1123581321", "Fibonacci"]
 ##DATABASE##
-VAR_1=2
-VAR_2=Hola
+X=1123581321
 ##STATS##
 ABIERTA=[]
 ABORTADA=["T2"]

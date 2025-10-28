@@ -1,12 +1,7 @@
 ##LOGS##
-1
-["1", "2"]
-["4444", "2"]
-["2"]
-["2"]
+No hubo logs
 ##DATABASE##
-VAR_1=2
-VAR_2=Hola
+X=T1
 ##STATS##
 ABIERTA=[]
 ABORTADA=["T2"]
