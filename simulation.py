@@ -2,6 +2,7 @@ from enums import TransactionState, ValidationType, ServerResponse
 from server import Server
 from transaction import Transaction
 import json
+import os
 
 class Simulation:
     def __init__(self, setup : dict):
@@ -80,8 +81,9 @@ class Simulation:
         for event in self.events:
             self.process_event(event)
 
-    def generate_output_file(self):
-        with open("simulation_log.txt", "w", encoding="utf-8") as f:
+    def generate_output_file(self, name: str):
+        path = os.path.join("logs", name)
+        with open(path, "w", encoding="utf-8") as f:
             f.write("##LOGS##\n")
             if len(self.logs) == 0:
                 f.write("No hubo logs\n")
