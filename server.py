@@ -44,7 +44,6 @@ class Server:
                         
         # Validación de 2PC
         for key in transaction.write_set.keys():
-            print("key to lock:", key, "locked resources:", self.locked_resources)
             if key in self.locked_resources:
                 return
         
@@ -61,7 +60,3 @@ class Server:
         self.accepted_transactions[transaction.transaction_id] = transaction
 
         return
-
-
-
-

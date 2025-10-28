@@ -8,7 +8,6 @@ class TransactionState(Enum):
     INVALIDA = "INVALIDA"            
 
 class ValidationType(Enum):
-    # Tipos de concurrencia
     FORWARD = "forward"
     BACKWARD = "backward"
 
