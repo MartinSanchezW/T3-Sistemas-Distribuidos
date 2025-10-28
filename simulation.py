@@ -57,8 +57,6 @@ class Simulation:
             if len(sections) == 2:
                 if action == "BEGIN":
                     transaction.begin()
-                elif action == "COMMIT":
-                    transaction.commit()
                 elif action == "ABORT":
                     transaction.abort()
                 elif action == "COMMIT":
@@ -116,7 +114,6 @@ class Simulation:
         # Se actualiza el servidor internamente.
     
     def commit(self, transaction: Transaction) -> None:
-
         isQuorumOk = len(transaction.approved_by_servers) >= (len(self.server_list) // 2) + 1
 
         isStateValid = transaction.state == TransactionState.EN_PREPARACION
@@ -161,7 +158,7 @@ class Simulation:
 
     def backward_control(self, transaction: Transaction) -> bool:
         read_set = transaction.read_set
-        for key in read_set.keys():
+        for key in read_set:
             for other_transaction in self.transactions.values():
                 if other_transaction.transaction_id == transaction.transaction_id:
                     continue
