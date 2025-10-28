@@ -13,10 +13,10 @@ class Server:
     def prepare(self, transaction: Transaction, 
                    allTransactions: dict[str, Transaction],
                    validation_type: ValidationType,
-                    ) -> ServerResponse:
+                    ) -> None:
         
         if transaction.transaction_id in self.accepted_transactions:
-            return ServerResponse.VOTE_YES # Revisar si tiene sentido este response
+            return 
 
         if validation_type == ValidationType.FORWARD:
             write_set = transaction.write_set
@@ -28,7 +28,7 @@ class Server:
                         ) or (other_transaction.state == TransactionState.EN_PREPARACION):
 
                         if key in other_transaction.read_set:
-                            return ServerResponse.VOTE_NO
+                            return 
         else: 
             read_set = transaction.read_set
             for key in read_set:
@@ -40,12 +40,17 @@ class Server:
                     ):
                         if key in other_transaction.write_set:
                             transaction.abort()
-                            return ServerResponse.VOTE_NO
+                            return 
                         
         # Validación de 2PC
         for key in transaction.write_set.keys():
+            print("key to lock:", key, "locked resources:", self.locked_resources)
             if key in self.locked_resources:
-                return ServerResponse.VOTE_NO
+                return
+        
+        for key in transaction.read_set:
+            if key in self.locked_resources:
+                return
         
         # Si no rechazó antes de esto, entonces bloqueamos recursos
         for key in transaction.write_set.keys():
@@ -54,9 +59,8 @@ class Server:
         transaction.state = TransactionState.EN_PREPARACION # Actualizamos
         
         self.accepted_transactions[transaction.transaction_id] = transaction
-        transaction.accept_by_server(self.name)
 
-        return ServerResponse.VOTE_YES
+        return
 
 
 
