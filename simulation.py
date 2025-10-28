@@ -82,8 +82,18 @@ class Simulation:
             self.process_event(event)
 
     def generate_output_file(self, name: str):
+        name = os.path.basename(name)
         name = name.replace(".jsonc", ".txt")
-        path = os.path.join("logs", name)
+
+        # Obtener el directorio donde está este archivo (simulation.py/main.py)
+        script_dir = os.path.dirname(__file__)
+        
+        # Crear la carpeta logs relativa al directorio del script
+        logs_dir = os.path.join(script_dir, "logs")
+        if not os.path.exists(logs_dir):
+            os.makedirs(logs_dir)
+
+        path = os.path.join(logs_dir, name)
         with open(path, "w", encoding="utf-8") as f:
             f.write("##LOGS##\n")
             if len(self.logs) == 0:
